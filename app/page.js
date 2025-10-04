@@ -1,10 +1,31 @@
 'use client';
-import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CloudUpload, X } from 'lucide-react';
+import axios from 'axios';
+import TextFromRichEditor from './components/TextFromRichEditor';
 
 export default function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+  const [courseData, setCourseData] = useState([]);
+  console.log('%c[] -> courseData : ', 'color: #5466dc', courseData);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios
+        .get(`${baseUrl}/api/global`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_ACCESS_TOKEN}`,
+          },
+        })
+        .then((res) => {
+          setCourseData(res?.data?.data);
+        });
+    };
+    fetchData();
+  }, []);
+
   const SKILLS_LIST = [
     'Html',
     'Css',
@@ -58,50 +79,6 @@ export default function Home() {
     if (!form.phone.trim()) return 'الرجاء إدخال رقم الهاتف.';
     return '';
   }
-
-  // async function handleSubmit(e) {
-  //   e.preventDefault();
-  //   const err = validate();
-  //   if (err) {
-  //     setStatus({ loading: false, error: err, success: '' });
-  //     return;
-  //   }
-  //   setStatus({ loading: true, error: '', success: '' });
-
-  //   try {
-  //     const res = await fetch(`${baseUrl}/api/training-applications`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_ACCESS_TOKEN}`,
-  //       },
-  //       body: JSON.stringify({ data: form }), // Strapi requires { data: {...} }
-  //     });
-  //     const data = await res.json();
-  //     if (!res.ok) throw new Error(data?.error?.message || 'حدث خطأ');
-  //     setStatus({
-  //       loading: false,
-  //       error: '',
-  //       success: 'تم إرسال البيانات بنجاح. شكرًا لك!',
-  //     });
-  //     setForm({
-  //       name: '',
-  //       email: '',
-  //       phone: '',
-  //       skills: {},
-  //       experience: '',
-  //       links: '',
-  //       preferred_time: '',
-  //       notes: '',
-  //     });
-  //   } catch (err) {
-  //     setStatus({
-  //       loading: false,
-  //       error: err.message || 'فشل الإرسال، حاول لاحقًا.',
-  //       success: '',
-  //     });
-  //   }
-  // }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -180,19 +157,23 @@ export default function Home() {
     }
   }
 
+  if (!courseData) {
+    return <div className="text-center text-black">loading...</div>;
+  }
+
   return (
     <main
       dir="rtl"
       className="min-h-screen font-arial text-gray-600 bg-gray-50 p-6 flex flex-col items-center justify-center"
     >
-      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-md p-8">
+      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-md p-3 md:p-8">
         <div className="header flex flex-col-reverse md:flex-row items-center justify-center md:justify-between">
           <div className="info">
-            <h1 className="text-2xl font-bold mb-2 text-center md:text-right">
-              نموذج تسجيل المتدربين
+            <h1 className="text-2xl text-[#3C5DAB] font-bold mb-2 text-center md:text-right">
+              {courseData?.pageTitle}
             </h1>
             <p className="text-sm text-gray-600 mb-6 text-center md:text-right">
-              أدخل أهم معلوماتك حتى نتمكن من التواصل معك وترتيب التدريب.
+              {courseData?.pageShortText}
             </p>
           </div>
           <img
@@ -202,10 +183,25 @@ export default function Home() {
           />
         </div>
 
+        <div className="h-[1px] w-full bg-gray-200 mb-4"></div>
+
+        <div className="info mb-10">
+          <div className="title flex gap-2 text-[15px] md:text-xl font-bold">
+            <label htmlFor="title">عنوان الدورة :</label>
+            <h1>{courseData?.courseTitle}</h1>
+          </div>
+
+          <div className="text-sm mt-4 flex flex-col gap-2">
+            <TextFromRichEditor blocks={courseData?.courseDescription} />
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
             <label className="flex flex-col text-right">
-              <span className="text-sm mb-1">الاسم الكامل *</span>
+              <span className="text-sm mb-1">
+                الاسم الكامل <b className="text-red-600">*</b>
+              </span>
               <input
                 name="name"
                 value={form.name}
@@ -214,7 +210,9 @@ export default function Home() {
               />
             </label>
             <label className="flex flex-col text-right">
-              <span className="text-sm mb-1">رقم الهاتف *</span>
+              <span className="text-sm mb-1">
+                رقم الهاتف <b className="text-red-600">*</b>
+              </span>
               <input
                 name="phone"
                 value={form.phone}
@@ -223,7 +221,9 @@ export default function Home() {
               />
             </label>
             <label className="flex flex-col text-right">
-              <span className="text-sm mb-1">البريد الإلكتروني *</span>
+              <span className="text-sm mb-1">
+                البريد الإلكتروني <b className="text-red-600">*</b>
+              </span>
               <input
                 name="email"
                 value={form.email}
@@ -233,14 +233,12 @@ export default function Home() {
             </label>
           </div>
           <div className="flex flex-col text-right">
-            <span className="text-sm mb-2">
-              المهارات والتخصصات (أهم المهارات)
-            </span>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <span className="text-sm mb-2">مهارات سابقة لديك</span>
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
               {SKILLS_LIST.map((skill) => (
                 <div
                   key={skill}
-                  className="max-w-[250px] flex items-center justify-between border p-2 rounded"
+                  className=" flex items-center justify-between border p-2 rounded"
                 >
                   <label className="flex items-center gap-2">
                     <input
@@ -326,7 +324,7 @@ export default function Home() {
                 accept=".pdf,.jpg,.png"
                 multiple
                 onChange={(e) => setFiles(Array.from(e.target.files))}
-                className="w-1/2 p-2 border"
+                className="w-3/4 md:w-1/2 p-2 border"
               />
               <div className="h-full p-2 cursor-pointer bg-[#3C5DAB] text-white">
                 <CloudUpload />

@@ -102,8 +102,8 @@ const Page = () => {
 
   return (
     <div dir="rtl" className="px-10 pb-10 bg-gray-50 min-h-screen">
-      <div className="header text-[#3C5DAB] flex items-center justify-between">
-        <div className="flex gap-2 items-center">
+      <div className="header text-[#3C5DAB] flex flex-col md:flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-2 items-center">
           <img
             src="/about-company-section-logo.png"
             className="w-[200px]"
@@ -111,7 +111,7 @@ const Page = () => {
           />
           <h1 className="text-2xl font-bold">بيانات المتقدمين للتدريب</h1>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center mt-4 md:mt-0">
           <h1 className="text-2xl font-bold">
             عدد المتقدمين: {applications.length}
           </h1>
@@ -123,7 +123,7 @@ const Page = () => {
           </button>
         </div>
       </div>
-      <div className="bg-gray-300 h-[1px]" />
+      <div className="bg-gray-300 h-[1px] mt-4 md:mt-0" />
       <div className="grid grid-cols-1 mt-6 md:grid-cols-2 gap-6">
         {applications.map((app) => (
           // <div
