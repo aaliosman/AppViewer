@@ -9,7 +9,6 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [applications, setApplications] = useState([]);
-  console.log('%c[] -> applications : ', 'color: #4f355a', applications);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

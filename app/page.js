@@ -7,7 +7,6 @@ import TextFromRichEditor from './components/TextFromRichEditor';
 export default function Home() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
   const [courseData, setCourseData] = useState([]);
-  console.log('%c[] -> courseData : ', 'color: #5466dc', courseData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,27 +166,32 @@ export default function Home() {
       className="min-h-screen font-arial text-gray-600 bg-gray-50 p-6 flex flex-col items-center justify-center"
     >
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-md p-3 md:p-8">
-        <div className="header flex flex-col-reverse md:flex-row items-center justify-center md:justify-between">
-          <div className="info">
+        <div className="header h-[400px] flex flex-col-reverse md:flex-row items-center justify-center md:justify-between">
+          {/* <div className="info">
             <h1 className="text-2xl text-[#3C5DAB] font-bold mb-2 text-center md:text-right">
               {courseData?.pageTitle}
             </h1>
             <p className="text-sm text-gray-600 mb-6 text-center md:text-right">
               {courseData?.pageShortText}
             </p>
-          </div>
-          <img
+          </div> */}
+          {/* <img
             src="/about-company-section-logo.png"
             className="w-[250px]"
             alt=""
+          /> */}
+          <img
+            src="/39903.jpg"
+            alt=""
+            className="h-full w-full object-center"
           />
         </div>
 
-        <div className="h-[1px] w-full bg-gray-200 mb-4"></div>
+        <div className="h-[1px] w-full bg-gray-200 mb-4 mt-6"></div>
 
         <div className="info mb-10">
           <div className="title flex gap-2 text-[15px] md:text-xl font-bold">
-            <label htmlFor="title">عنوان الدورة :</label>
+            {/* <label htmlFor="title">عنوان الدورة :</label> */}
             <h1>{courseData?.courseTitle}</h1>
           </div>
 
