@@ -37,7 +37,7 @@ const Page = () => {
   const getApplications = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_API_URL}/api/training-applications?populate=attachments`,
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/training-applications?populate=attachments`,
         {
           method: 'GET',
           headers: {

@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios
-        .get(`${baseUrl}/api/global`, {
+        .get(`${baseUrl}/global`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export default function Home() {
           fileData.append('files', file);
         });
 
-        const uploadRes = await fetch(`${baseUrl}/api/upload`, {
+        const uploadRes = await fetch(`${baseUrl}/upload`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_ACCESS_TOKEN}`,
@@ -114,7 +114,7 @@ export default function Home() {
       }
 
       // Now submit the application
-      const res = await fetch(`${baseUrl}/api/training-applications`, {
+      const res = await fetch(`${baseUrl}/training-applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
